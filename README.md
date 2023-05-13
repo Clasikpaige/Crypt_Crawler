@@ -37,5 +37,6 @@ import os
 # Generate a list of 10,000 random words and hash them using SHA-256
 ```
 os.system('python wordlist_generator.py --num_words 10000 --hash_algorithm sha256')
-Note that the wordlist_generator tool should only be used for ethical purposes, such as security testing and password recovery. Do not use this tool to engage in illegal activities or to harm others.
 ```
+Note that the wordlist_generator tool should only be used for ethical purposes, such as security testing and password recovery. Do not use this tool to engage in illegal activities or to harm others.
+
