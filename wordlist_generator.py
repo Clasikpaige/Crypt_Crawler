@@ -31,8 +31,10 @@ def generate_private_key(wordlist, target_hash):
 
 
 def generate_key_from_word(word):
-    # Add code here to generate a private key from the word
-    pass
+    seed = int(hashlib.sha256(word.encode()).hexdigest(), 16)
+    random.seed(seed)
+    private_key = ''.join(random.choice(string.ascii_letters + string.digits) for _ in range(64))
+    return private_key
 
 
 def main():
@@ -71,3 +73,4 @@ def main():
 
 if __name__ == '__main__':
     main()
+
