@@ -4,6 +4,7 @@ import string
 import random
 import argparse
 import hashlib
+import pandas as pd
 
 
 def generate_wordlist(length, count, output_file):
@@ -11,9 +12,9 @@ def generate_wordlist(length, count, output_file):
     for i in range(count):
         word = ''.join(random.choice(string.ascii_lowercase) for _ in range(length))
         words.append(word)
-    with open(output_file, 'w') as f:
-        f.write('\n'.join(words))
-    return words
+    df = pd.DataFrame(words, columns=['word'])
+    df.to_csv(output_file, index=False)
+    return df['word']
 
 
 def hash_wordlist(hash_type, wordlist_file):
@@ -41,7 +42,7 @@ def main():
     parser = argparse.ArgumentParser(description='Generate a wordlist and hash it with John the Ripper.')
     parser.add_argument('--length', type=int, default=8, help='the length of each word in the wordlist')
     parser.add_argument('--count', type=int, default=20000, help='the number of words to generate in the wordlist')
-    parser.add_argument('--output', type=str, default='wordlist.txt', help='the name of the output file')
+    parser.add_argument('--output', type=str, default='wordlist.csv', help='the name of the output file')
     parser.add_argument('--hash-type', type=str, default='md5crypt', help='the type of hash to use with John the Ripper')
     parser.add_argument('--target', type=str, default=None, help='the hostname or wallet to target')
     parser.add_argument('--target-hash', type=str, default=None, help='the hash of the target to generate the private key for')
@@ -58,12 +59,11 @@ def main():
         target = input("Enter the target hostname or wallet address: ")
 
     wordlist_file = os.path.join('wordlist', output_file)
-    generate_wordlist(length, count, wordlist_file)
+    wordlist = generate_wordlist(length, count, wordlist_file)
     hash_wordlist(hash_type, wordlist_file)
 
     if target and target_hash:
         print(f"Generating private key for target {target}...")
-        wordlist = generate_wordlist(length, count, wordlist_file)
         private_key = generate_private_key(wordlist, target_hash)
         if private_key:
             print(f"Private key generated: {private_key}")
@@ -73,4 +73,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-
