@@ -1,15 +1,14 @@
 Wordlist Generator
 
-The wordlist_generator tool is a Python script that generates a list of random words and hashes them using John the Ripper. This tool is useful for generating wordlists that can be used for security testing and password cracking.
+The wordlist_generator program is a Python script designed to generate a list of randomized words and then hash them using John the Ripper. This program can be useful for generating wordlists that can be utilized for security testing and password cracking.
+
+In addition to generating wordlists, the program includes built-in functionality for generating private keys for a specified target hash. This can be particularly useful for generating private keys for cryptocurrency wallets or other applications that utilize hashed values for authentication or verification.
+
+To use this functionality, simply specify a target hash when running the program. The program will then generate a wordlist, iterate over each word, and generate a private key from the word that matches the target hash.
 
 Installation
 
-To install and use the wordlist_generator tool, you will need to have Python 3 and John the Ripper installed on your system.
-
-Install Python 3 if you don't have it already. You can download it from the official Python website: https://www.python.org/downloads/
-Install John the Ripper. You can download it from the official John the Ripper website: https://www.openwall.com/john/
-Once you have installed Python 3 and John the Ripper, you can clone this repository to your local machine:
-bash
+To install and utilize the wordlist_generator program, you must have Python 3 and John the Ripper installed on your system.
 ```
 git clone https://github.com/clasikpaige/wordlist_generator.git
 ```
