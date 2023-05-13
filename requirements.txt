@@ -1,2 +1,4 @@
-john>=1.9.0
+pandas==1.2.4
+cryptography==3.4.7
+
 
