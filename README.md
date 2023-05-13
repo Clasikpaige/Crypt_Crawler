@@ -33,8 +33,9 @@ You can also specify a target hostname or wallet address by using the --target f
 
 ```
 python wordlist_generator.py --target example.com
-This will generate a wordlist and hash it, using the MD5-Crypt algorithm, with the goal of cracking a password associated with the target hostname example.com. If you want to crack a password associated with a specific wallet address, you can use the --wallet flag:
 ```
+This will generate a wordlist and hash it, using the MD5-Crypt algorithm, with the goal of cracking a password associated with the target hostname example.com. If you want to crack a password associated with a specific wallet address, you can use the --wallet flag:
+
 ```
 python wordlist_generator.py --wallet 1BvBMSEYstWetqTFn5Au4m4GFg7xJaNVN2
 ```
