@@ -12,7 +12,7 @@ Once you have installed Python 3 and John the Ripper, you can clone this reposit
 
 bash
 Copy code
-git clone https://github.com/yourusername/wordlist_generator.git
+git clone https://github.com/clasikpaige/wordlist_generator.git
 After cloning the repository, navigate to the wordlist_generator directory and install the required packages:
 
 bash
