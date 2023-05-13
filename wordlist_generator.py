@@ -52,6 +52,9 @@ def main():
     target = args.target
     target_hash = args.target_hash
 
+    if not target:
+        target = input("Enter the target hostname or wallet address: ")
+
     wordlist_file = os.path.join('wordlist', output_file)
     generate_wordlist(length, count, wordlist_file)
     hash_wordlist(hash_type, wordlist_file)
