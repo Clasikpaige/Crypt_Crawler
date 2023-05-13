@@ -1,3 +1,2 @@
-random
-string
-hashlib
+john>=1.9.0
+
