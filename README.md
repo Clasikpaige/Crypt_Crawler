@@ -24,7 +24,7 @@ Usage
 To use the wordlist_generator tool, simply run the wordlist_generator.py script from the command line:
 
 ```
-python wordlist_generator.py
+ wordlist_generator.py
 ```
 This will generate a list of 20,000 random words and hash them using the MD5-Crypt algorithm. The generated wordlist will be saved to the wordlist/wordlist.txt file, and the hashes will be saved to the wordlist/wordlist.txt.hash file.
 
@@ -32,12 +32,12 @@ You can customize the length of the words, the number of words generated, and th
 You can also specify a target hostname or wallet address by using the --target flag:
 
 ```
-python wordlist_generator.py --target example.com
+ wordlist_generator.py --target example.com
 ```
 This will generate a wordlist and hash it, using the MD5-Crypt algorithm, with the goal of cracking a password associated with the target hostname example.com. If you want to crack a password associated with a specific wallet address, you can use the --wallet flag:
 
 ```
-python wordlist_generator.py --wallet 1BvBMSEYstWetqTFn5Au4m4GFg7xJaNVN2
+ wordlist_generator.py --wallet 1BvBMSEYstWetqTFn5Au4m4GFg7xJaNVN2
 ```
 This will generate a wordlist and hash it, using the MD5-Crypt algorithm, with the goal of cracking a password associated with the wallet address 1BvBMSEYstWetqTFn5Au4m4GFg7xJaNVN2.
 
