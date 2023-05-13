@@ -4,7 +4,11 @@ import string
 import random
 import argparse
 import pandas as pd
-from sklearn.feature_extraction.text import HashingVectorizer
+import hashlib
+import binascii
+from cryptography.hazmat.backends import default_backend
+from cryptography.hazmat.primitives import hashes
+from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
 
 
 def generate_wordlist(length, count, output_file):
@@ -23,21 +27,25 @@ def hash_wordlist(hash_type, wordlist_file):
 
 
 def generate_private_key(wordlist, target_hash):
-    vectorizer = HashingVectorizer(n_features=2**10, binary=True)
-    word_hashes = vectorizer.transform(wordlist)
-    word_hashes = word_hashes.toarray()
+    backend = default_backend()
+    salt = os.urandom(16)
+    password = None
     for i in range(len(wordlist)):
-        if target_hash == word_hashes[i].tobytes():
-            private_key = generate_key_from_word(wordlist[i])
-            return private_key
+        if target_hash == hashlib.sha256(wordlist[i].encode()).hexdigest():
+            password = wordlist[i].encode()
+            break
+    if password:
+        kdf = PBKDF2HMAC(
+            algorithm=hashes.SHA256(),
+            length=32,
+            salt=salt,
+            iterations=100000,
+            backend=backend
+        )
+        key = kdf.derive(password)
+        private_key = binascii.hexlify(key).decode()
+        return private_key
     return None
-
-
-def generate_key_from_word(word):
-    seed = int(hashlib.sha256(word.encode()).hexdigest(), 16)
-    random.seed(seed)
-    private_key = ''.join(random.choice(string.ascii_letters + string.digits) for _ in range(64))
-    return private_key
 
 
 def main():
