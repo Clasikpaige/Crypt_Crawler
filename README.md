@@ -16,8 +16,8 @@ After cloning the repository, navigate to the wordlist_generator directory and i
 ```
 cd wordlist_generator
 pip install -r requirements.txt
-Usage
 ```
+##usage
 
 To use the wordlist_generator tool, simply run the wordlist_generator.py script from the command line:
 
