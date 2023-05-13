@@ -3,8 +3,8 @@ import subprocess
 import string
 import random
 import argparse
-import hashlib
 import pandas as pd
+from sklearn.feature_extraction.text import HashingVectorizer
 
 
 def generate_wordlist(length, count, output_file):
@@ -23,10 +23,12 @@ def hash_wordlist(hash_type, wordlist_file):
 
 
 def generate_private_key(wordlist, target_hash):
-    for word in wordlist:
-        hashed_word = hashlib.sha256(word.encode()).hexdigest()
-        if hashed_word == target_hash:
-            private_key = generate_key_from_word(word)
+    vectorizer = HashingVectorizer(n_features=2**10, binary=True)
+    word_hashes = vectorizer.transform(wordlist)
+    word_hashes = word_hashes.toarray()
+    for i in range(len(wordlist)):
+        if target_hash == word_hashes[i].tobytes():
+            private_key = generate_key_from_word(wordlist[i])
             return private_key
     return None
 
