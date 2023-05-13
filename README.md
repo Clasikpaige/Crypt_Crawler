@@ -30,8 +30,9 @@ You can customize the length of the words, the number of words generated, and th
 
 
 # Example usage of wordlist_generator.py
+```
 import os
-
+```
 # Generate a list of 10,000 random words and hash them using SHA-256
 ```
 os.system('python wordlist_generator.py --num_words 10000 --hash_algorithm sha256')
