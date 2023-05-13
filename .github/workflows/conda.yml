@@ -1,0 +1,35 @@
+name: my-env
+channels:
+  - conda-forge
+dependencies:
+  - python=3.9
+  - pandas=1.3.0
+  - numpy=1.21.0
+  - scikit-learn=0.24.2
+  - matplotlib=3.4.2
+  - seaborn=0.11.1
+
+platform:
+  - linux-64  # for 64-bit Linux
+  - osx-64    # for 64-bit macOS
+  - win-64    # for 64-bit Windows
+
+# Set environment variables
+env:
+  MY_VAR: "my value"
+
+# Post-activation script
+post_activate:
+  - echo "This is a post-activation script."
+
+# Packages to exclude from the environment
+exclude:
+  - openssl
+
+# Packages to pin to specific versions
+# Here, we are pinning numpy to version 1.21.0
+# and pandas to version 1.3.*
+pin_run_as_build:
+  - numpy==1.21.0
+pin_compatible:
+  - pandas=1.3.*
