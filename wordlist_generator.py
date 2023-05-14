@@ -89,8 +89,7 @@ def main():
             else:
                 print("Generated private key is invalid.")
         else:
-        print(f"No matching password found for target hash {target_hash}.")
-        
+            print(f"No matching password found for target hash {target_hash}.")
+
 if __name__ == '__main__':
-    main()
 
