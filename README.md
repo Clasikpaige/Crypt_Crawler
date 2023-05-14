@@ -1,11 +1,15 @@
 Wordlist_Generator
 ![alt text](https://www.dropbox.com/s/2jgjgzzl4b7m4gg/Photo%2014-05-2023%2C%2012%2001%2056%20PM.jpg?raw=1)
 
+..! usecase
+
+"""
 The wordlist_generator program is a Python script that allows you to generate a list of random words and hash them using John the Ripper. You can use this tool for a variety of security testing and password cracking applications.
 
 But that's not all! The program also includes functionality for generating private keys for a specified target hash. This can be really useful for generating private keys for cryptocurrency wallets or other applications that use hashed values for authentication or verification.
 
 When you run the program, you can specify a target hash and the program will generate a wordlist. It then iterates over each word in the list, generates a private key from the word, and checks if the resulting public key matches the target address or wallet. This allows you to verify whether a given seed phrase corresponds to a particular cryptocurrency wallet or other application.
+"""
 
 
 
