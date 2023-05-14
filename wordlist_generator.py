@@ -7,8 +7,8 @@ import binascii
 from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
-from pybtc import BitcoinPrivateKey
 from mnemonic import Mnemonic
+from pybtc import BitcoinPrivateKey
 
 
 def generate_wordlist(count, output_file):
@@ -89,11 +89,8 @@ def main():
             else:
                 print("Generated private key is invalid.")
         else:
-            print(f"No matching password found for target hash {target_hash}.")
-    else:
-        print("Target or target hash not specified.")
-
-
+        print(f"No matching password found for target hash {target_hash}.")
+        
 if __name__ == '__main__':
     main()
 
