@@ -20,9 +20,6 @@ If the `target` and `target-hash` arguments are not specified, the user will be 
 
 
 
-The program generates a wordlist, hashes it using the specified hash type, and then checks each word in the list to see if it generates a private key that matches the target address or wallet. If a matching private key is found, the program will indicate that the private key is valid. Otherwise, it will indicate that no matching password was found for the target hash.
-
-
 
 ![alt text](https://www.dropbox.com/s/1x2avy6hc9qsned/Photo%2014-05-2023%2C%2011%2045%2049%20AM.jpg?raw=1)
 
