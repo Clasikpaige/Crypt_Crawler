@@ -9,7 +9,7 @@ import binascii
 from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
-
+from pybtc import BitcoinPrivateKey
 
 def generate_wordlist(length, count, output_file):
     words = []
@@ -47,6 +47,11 @@ def generate_private_key(wordlist, target_hash):
         return private_key
     return None
 
+def validate_private_key(private_key, target_address):
+    key = BitcoinPrivateKey(private_key)
+    address = key.public_key().address()
+    return address == target_address
+
 
 def main():
     parser = argparse.ArgumentParser(description='Generate a wordlist and hash it with John the Ripper.')
@@ -67,6 +72,8 @@ def main():
 
     if not target:
         target = input("Enter the target hostname or wallet address: ")
+    if not target_hash:
+        target_hash = hashlib.sha256(target.encode()).hexdigest()
 
     wordlist_file = os.path.join('wordlist', output_file)
     wordlist = generate_wordlist(length, count, wordlist_file)
@@ -77,9 +84,13 @@ def main():
         private_key = generate_private_key(wordlist, target_hash)
         if private_key:
             print(f"Private key generated: {private_key}")
-        else:
-            print("Unable to generate private key for target.")
+            is_valid = validate_private_key(private_key, target)
+         if is_valid:
+print(f"The private key is valid and matches the bitcoin address {address}")
+else:
+print("The private key is not valid for the given bitcoin address.")
+else:
+print("Unable to generate private key for target.")
 
-
-if __name__ == '__main__':
-    main()
+if name == 'main':
+main()
