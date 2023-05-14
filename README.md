@@ -1,15 +1,23 @@
 Wordlist_Generator
 ![alt text](https://www.dropbox.com/s/2jgjgzzl4b7m4gg/Photo%2014-05-2023%2C%2012%2001%2056%20PM.jpg?raw=1)
 
-..! usecase
+# This script generates a wordlist and hashes it using John the Ripper.
+# It can be used for security testing and password cracking.
+# Additionally, it can generate private keys for a specified target hash.
+# This functionality is useful for generating private keys for cryptocurrency wallets or other applications that use hashed values for authentication or verification.
 
-"""
-The wordlist_generator program is a Python script that allows you to generate a list of random words and hash them using John the Ripper. You can use this tool for a variety of security testing and password cracking applications.
+# The program takes several command-line arguments:
+# --count: the number of words to generate in the wordlist (default is 1)
+# --output: the name of the output file (default is "wordlist.csv")
+# --hash-type: the type of hash to use with John the Ripper (default is "md5crypt")
+# --target: the hostname or wallet to target (optional)
+# --target-hash: the hash of the target to generate the private key for (optional)
 
-But that's not all! The program also includes functionality for generating private keys for a specified target hash. This can be really useful for generating private keys for cryptocurrency wallets or other applications that use hashed values for authentication or verification.
-
-When you run the program, you can specify a target hash and the program will generate a wordlist. It then iterates over each word in the list, generates a private key from the word, and checks if the resulting public key matches the target address or wallet. This allows you to verify whether a given seed phrase corresponds to a particular cryptocurrency wallet or other application.
-"""
+# If the target and target-hash arguments are not specified, the user will be prompted to enter them.
+# The program generates a wordlist, hashes it using the specified hash type, and then checks each word in the list
+# to see if it generates a private key that matches the target address or wallet.
+# If a matching private key is found, the program will indicate that the private key is valid.
+# Otherwise, it will indicate that no matching password was found for the target hash.
 
 
 
