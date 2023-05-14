@@ -7,7 +7,11 @@ But that's not all! The program also includes functionality for generating priva
 
 When you run the program, you can specify a target hash and the program will generate a wordlist. It then iterates over each word in the list, generates a private key from the word, and checks if the resulting public key matches the target address or wallet. This allows you to verify whether a given seed phrase corresponds to a particular cryptocurrency wallet or other application.
 
+
+
 ![alt text](https://www.dropbox.com/s/1x2avy6hc9qsned/Photo%2014-05-2023%2C%2011%2045%2049%20AM.jpg?raw=1)
+
+
 
 The program uses a number of technologies to accomplish this. It relies on the John the Ripper tool for hashing the wordlist, and uses the cryptography library to generate private keys from the hashed values. It also uses the pybtc library for generating Bitcoin private keys, and the mnemonic library for generating BIP39 seed phrases.
 
