@@ -23,8 +23,6 @@ Additionally, it can generate private keys for a specified target hash.*
 
 The program uses a number of technologies to accomplish this. It relies on the John the Ripper tool for hashing the wordlist, and uses the cryptography library to generate private keys from the hashed values. It also uses the pybtc library for generating Bitcoin private keys, and the mnemonic library for generating BIP39 seed phrases.
 
-Overall, the wordlist_generator program is a powerful tool that can help you with a variety of security testing and password cracking tasks, as well as generating private keys for cryptocurrency wallets and other applications.
-
 Installation
 
 ![alt text](https://www.dropbox.com/s/8t4cem1pmf3vmow/Photo%2014-05-2023%2C%2011%2048%2052%20AM.jpg?raw=1)
