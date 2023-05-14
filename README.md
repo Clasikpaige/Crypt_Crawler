@@ -4,7 +4,8 @@ The wordlist_generator program is a Python script that allows you to generate a 
 
 But that's not all! The program also includes functionality for generating private keys for a specified target hash. This can be really useful for generating private keys for cryptocurrency wallets or other applications that use hashed values for authentication or verification.
 
-![Image description](https://www.dropbox.com/s/4k8t21s3m1rc7vz/Photo%2014-05-2023%2C%2011%2044%2007%20AM.jpg?dl=0)
+![alt text](https://www.dropbox.com/s/4k8t21s3m1rc7vz/Photo%2014-05-2023%2C%2011%2044%2007%20AM.jpg?raw=1)
+
 
 When you run the program, you can specify a target hash and the program will generate a wordlist. It then iterates over each word in the list, generates a private key from the word, and checks if the resulting public key matches the target address or wallet. This allows you to verify whether a given seed phrase corresponds to a particular cryptocurrency wallet or other application.
 ![Image description](https://www.dropbox.com/s/1x2avy6hc9qsned/Photo%2014-05-2023%2C%2011%2045%2049%20AM.jpg?dl=0)
