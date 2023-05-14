@@ -1,7 +1,8 @@
-cryptography==3.4.7
-pandas==1.2.4
+pandas==1.2.5
+hashlib==3.4.2
+binascii==0.2
+cryptography==3.4.8
 mnemonic==0.19
-pybtc==0.1.11
 
 
 
