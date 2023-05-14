@@ -85,11 +85,14 @@ def main():
             print(f"Private key generated: {private_key}")
             is_valid = validate_private_key(private_key, target)
             if is_valid:
-print(f"The private key is valid and matches the bitcoin address {address}")
-else:
-print("The private key is not valid for the given bitcoin address.")
-else:
-print("Unable to generate private key for target.")
+                print("Private key is valid!")
+            else:
+                print("Generated private key is invalid.")
+        else:
+            print(f"No matching password found for target hash {target_hash}.")
+    else:
+        print("Target or target hash not specified.")
 
-if name == 'main':
+
+if __name__ == '__main__':
 main()
