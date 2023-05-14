@@ -6,7 +6,7 @@ It can be used for security testing and password cracking.
 Additionally, it can generate private keys for a specified target hash.*
 *This functionality is useful for generating private keys for cryptocurrency wallets or other applications that use hashed values for authentication or verification.*
 
-`TheThe program takes several command-line arguments:
+ The program takes several command-line arguments:
 --count: the number of words to generate in the wordlist (default is 1)
 --output: the name of the output file (default is "wordlist.csv")
 --hash-type: the type of hash to use with John the Ripper (default is "md5crypt")
