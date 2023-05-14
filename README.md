@@ -4,7 +4,7 @@
 This script generates a wordlist and hashes it using John the Ripper.
 It can be used for security testing and password cracking.
 Additionally, it can generate private keys for a specified target hash.
-# This functionality is useful for generating private keys for cryptocurrency wallets or other applications that use hashed values for authentication or verification.
+*This functionality is useful for generating private keys for cryptocurrency wallets or other applications that use hashed values for authentication or verification.*
 
 The program takes several command-line arguments:
  --count: the number of words to generate in the wordlist (default is 1)
@@ -13,7 +13,7 @@ The program takes several command-line arguments:
  --target: the hostname or wallet to target (optional)
  --target-hash: the hash of the target to generate the private key for (optional)
 
- `*If the target and target-hash arguments are not specified, the user will be prompted to enter them.* The program generates a wordlist, hashes it using the specified hash type, and then checks each word in the list to see if it generates a private key that matches the target address or wallet. If a matching private key is found, the program will indicate that the private key is valid. Otherwise, it will indicate that no matching password was found for the target hash.`
+ `If the target and target-hash arguments are not specified, the user will be prompted to enter them.* The program generates a wordlist, hashes it using the specified hash type, and then checks each word in the list to see if it generates a private key that matches the target address or wallet. If a matching private key is found, the program will indicate that the private key is valid. Otherwise, it will indicate that no matching password was found for the target hash.`
 
 
 
