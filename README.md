@@ -3,12 +3,15 @@
 
  
 
- `wordlist_generator` program is a powerful tool that can help you with a variety of security testing and password cracking tasks, as well as generating private keys for cryptocurrency wallets and other The program takes several command-line arguments:
---count: the number of words to generate in the wordlist (default is 1)
---output: the name of the output file (default is "wordlist.csv")
---hash-type: the type of hash to use with John the Ripper (default is "md5crypt")
---target: the hostname or wallet to target (optional)
---target-hash: the hash of the target to generate the private key for (optional)
+ `wordlist_generator` program is a powerful tool that can help you with a variety of security testing and password cracking tasks, as well as generating private keys for cryptocurrency wallets and other applications.
+
+The program takes several command-line arguments:
+`--count`: the number of words to generate in the wordlist (default is 1)
+`--output`: the name of the output file (default is "wordlist.csv")
+`--hash-type`: the type of hash to use with John the Ripper (default is "md5crypt")
+`--target`: the hostname or wallet to target (optional)
+`--target-hash`: the hash of the target to generate the private key for (optional)
+
 
 If the `target` and `target-hash` arguments are not specified, the user will be prompted to enter them. The program generates a wordlist, hashes it using the specified hash type, and then checks each word in the list to see if it generates a private key that matches the target address or wallet. If a matching private key is found, the program will indicate that the private key is valid. Otherwise, it will indicate that no matching password was found for the target hash.
 
