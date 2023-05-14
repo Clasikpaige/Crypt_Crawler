@@ -14,7 +14,7 @@ from mnemonic import Mnemonic
 def generate_wordlist(count, output_file):
     mnemonic = Mnemonic("english")
     words = mnemonic.generate(strength=128)
-    df = pd.DataFrame([words], columns=['word'])
+    df = pd.DataFrame([words.split()], columns=['word'])
     df.to_csv(output_file, index=False)
     return words
 
@@ -95,4 +95,5 @@ def main():
 
 
 if __name__ == '__main__':
-main()
+    main()
+
