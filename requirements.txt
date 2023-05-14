@@ -1,5 +1,7 @@
-pandas==1.3.4
-cryptography==35.0.0
-pybtc==0.1.8
+cryptography==3.4.7
+pandas==1.2.4
+mnemonic==0.19
+pybtc==0.1.11
+
 
 
