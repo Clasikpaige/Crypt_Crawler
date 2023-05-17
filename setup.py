@@ -1,11 +1,15 @@
 from setuptools import setup, find_packages
 
 setup(
-    name='wordlist-generator',
+    name='Crypt_Crawler',
     version='1.0.0',
     packages=find_packages(),
     install_requires=[
-        'john>=1.9.0',
+        'pywallet==0.3.1',
+        'cryptography==3.4.8',
+        'mnemonic==0.20',
+        'pybtc==0.3.4',
+        'pandas==1.3.0',
     ],
     entry_points={
         'console_scripts': ['wordlist-generator=wordlist_generator:main']
