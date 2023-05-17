@@ -26,13 +26,11 @@ If the `target` and `target-hash` arguments are not specified, the user will be 
 
 The program uses a number of technologies to accomplish this. It relies on the `John the Ripper` tool for hashing the wordlist, and uses the `cryptography` library to generate private keys from the hashed values. It also uses the `pybtc` library for generating Bitcoin private keys, and the `mnemonic` library for generating BIP39 seed phrases.
 
-the `wordlist_generator` program is a powerful tool that can help you with a variety of security testing and password cracking tasks, as well as generating private keys for cryptocurrency wallets and other applications.
-
 # Installation
 
 ![alt text](https://www.dropbox.com/s/8t4cem1pmf3vmow/Photo%2014-05-2023%2C%2011%2048%2052%20AM.jpg?raw=1)
 
-To install and utilize the wordlist_generator program, you must have Python 3 and John the Ripper installed on your system.
+To install and utilize the Crypt_crawler program, you must have Python 3 and John the Ripper installed on your system.
 ```
 git clone https://github.com/clasikpaige/Crypt_crawler.git
 ```
