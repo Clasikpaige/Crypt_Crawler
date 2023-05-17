@@ -2,14 +2,13 @@ import os
 import subprocess
 import argparse
 import pandas as pd
-import hashlib
 import binascii
+from pywallet import wallet
 from cryptography.hazmat.backends import default_backend
-from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
+from cryptography.hazmat.primitives import hashes
 from mnemonic import Mnemonic
 from pybtc import BitcoinPrivateKey
-
 
 def generate_wordlist(count, output_file):
     mnemonic = Mnemonic("english")
@@ -18,11 +17,9 @@ def generate_wordlist(count, output_file):
     df.to_csv(output_file, index=False)
     return words
 
-
 def hash_wordlist(hash_type, wordlist_file):
     hash_command = f'john --wordlist={wordlist_file} --format={hash_type}'
     subprocess.run(hash_command, shell=True)
-
 
 def generate_private_key(wordlist, target_hash):
     backend = default_backend()
@@ -47,12 +44,21 @@ def generate_private_key(wordlist, target_hash):
         return private_key
     return None
 
-
 def validate_private_key(private_key, target_address):
     key = BitcoinPrivateKey(private_key)
     address = key.public_key().address()
     return address == target_address
 
+def recover_recovery_phrase(wordlist, target_address):
+    for word in wordlist:
+        seed = wallet.mnemonic_to_seed(word)
+        recovered_wallet = wallet.create_wallet(network="BTC", seed=seed, children=1)
+        recovered_address = recovered_wallet['address']
+        
+        if target_address == recovered_address:
+            return word
+    
+    return None
 
 def main():
     parser = argparse.ArgumentParser(description='Generate a wordlist and hash it with John the Ripper.')
@@ -78,18 +84,29 @@ def main():
     wordlist = generate_wordlist(count, wordlist_file)
     hash_wordlist(hash_type, wordlist_file)
 
-    if target and target_hash:
-        print(f"Generating private key for target {target}...")
+    if target_hash:
         private_key = generate_private_key(wordlist, target_hash)
         if private_key:
             print(f"Private key generated: {private_key}")
             is_valid = validate_private_key(private_key, target)
-            if is_valid:
-                print("Private key is valid!")
-            else:
-                print("Generated private key is invalid.")
-        else:
-            print(f"No matching password found for target hash {target_hash}.")
+            if private_key:
+    print(f"Private key generated: {private_key}")
+    is_valid = validate_private_key(private_key, target)
+    if is_valid:
+        print("Private key is valid!")
+    else:
+        print("Generated private key is invalid.")
+else:
+    print(f"No matching password found for target hash {target_hash}.")
+
+recovery_word = recover_recovery_phrase(wordlist, target)
+
+if recovery_word:
+    print(f"Recovered recovery phrase: {recovery_word}")
+else:
+    print("Recovery phrase not found.")
 
 if __name__ == '__main__':
+    main()
 
+               
