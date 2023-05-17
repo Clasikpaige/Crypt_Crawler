@@ -3,7 +3,8 @@
 
  
 
- `wordlist_generator` program is a powerful tool that can help you with a variety of security testing and password cracking tasks, as well as generating private keys for cryptocurrency wallets and other applications.
+ # wordlist_generator 
+ program is a powerful tool that can help you with a variety of security testing and password cracking tasks, as well as generating private keys for cryptocurrency wallets and other applications.
 
 The program takes several command-line arguments:
 `--count`: the number of words to generate in the wordlist (default is 1)
