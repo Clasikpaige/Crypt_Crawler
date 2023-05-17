@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 
 setup(
-    name='Crypt_Crawler',
+    name='Crypt_crawler',
     version='1.0.0',
     packages=find_packages(),
     install_requires=[
@@ -12,6 +12,6 @@ setup(
         'pandas==1.3.0',
     ],
     entry_points={
-        'console_scripts': ['wordlist-generator=wordlist_generator:main']
+        'console_scripts': ['crypt-crawler=crypt_crawler:main']
     }
 )
