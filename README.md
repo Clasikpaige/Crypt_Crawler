@@ -27,7 +27,7 @@ The program uses a number of technologies to accomplish this. It relies on the `
 
 the `wordlist_generator` program is a powerful tool that can help you with a variety of security testing and password cracking tasks, as well as generating private keys for cryptocurrency wallets and other applications.
 
-Installation
+# Installation
 
 ![alt text](https://www.dropbox.com/s/8t4cem1pmf3vmow/Photo%2014-05-2023%2C%2011%2048%2052%20AM.jpg?raw=1)
 
@@ -41,7 +41,7 @@ bash
 cd wordlist_generator
 pip install -r requirements.txt
 ```
-Usage
+# Usage
 
 To use the wordlist_generator tool, simply run the wordlist_generator.py script from the command line:
 
