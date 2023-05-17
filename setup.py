@@ -8,7 +8,6 @@ setup(
         'pywallet==0.3.1',
         'cryptography==3.4.8',
         'mnemonic==0.20',
-        'pybtc==0.3.4',
         'pandas==1.3.0',
     ],
     entry_points={
