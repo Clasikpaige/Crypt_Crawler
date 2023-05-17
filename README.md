@@ -63,4 +63,9 @@ This will generate a wordlist and hash it, using the MD5-Crypt algorithm, with t
 ```
 This will generate a wordlist and hash it, using the MD5-Crypt algorithm, with the goal of cracking a password associated with the wallet address 1BvBMSEYstWetqTFn5Au4m4GFg7xJaNVN2.
 
+# Contributing
+
+If you have any ideas to optimize and improve its performance, feel free to make a pull request!
+
+
 Note that the Crypt_crawler tool should only be used for ethical purposes, such as security testing and password recovery. Do not use this tool to engage in illegal activities or to harm others.
