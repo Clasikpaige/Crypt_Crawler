@@ -30,11 +30,11 @@ The program uses a number of technologies to accomplish this. It relies on the `
 
 ![alt text](https://www.dropbox.com/s/8t4cem1pmf3vmow/Photo%2014-05-2023%2C%2011%2048%2052%20AM.jpg?raw=1)
 
-To install and utilize the Crypt_crawler program, you must have Python 3 and John the Ripper installed on your system.
+To install and utilize the `Crypt_crawler` program, you must have Python 3 and John the Ripper installed on your system.
 ```
 git clone https://github.com/clasikpaige/Crypt_crawler.git
 ```
-After cloning the repository, navigate to the wordlist_generator directory and install the required packages:
+After cloning the repository, navigate to the `Crypt_crawler` directory and install the required packages:
 bash
 ```
 cd Crypt_crawler
@@ -63,4 +63,4 @@ This will generate a wordlist and hash it, using the MD5-Crypt algorithm, with t
 ```
 This will generate a wordlist and hash it, using the MD5-Crypt algorithm, with the goal of cracking a password associated with the wallet address 1BvBMSEYstWetqTFn5Au4m4GFg7xJaNVN2.
 
-Note that the wordlist_generator tool should only be used for ethical purposes, such as security testing and password recovery. Do not use this tool to engage in illegal activities or to harm others.
+Note that the Crypt_crawler tool should only be used for ethical purposes, such as security testing and password recovery. Do not use this tool to engage in illegal activities or to harm others.
