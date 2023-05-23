@@ -1,5 +1,5 @@
 pywallet
 cryptography
 mnemonic
-pybtc
+bitcoinlib
 pandas
