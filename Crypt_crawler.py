@@ -8,7 +8,7 @@ from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
 from cryptography.hazmat.primitives import hashes
 from mnemonic import Mnemonic
-from pybtc import BitcoinPrivateKey
+from bitcoinlib.keys import HDKey
 
 def generate_wordlist(count, output_file):
     mnemonic = Mnemonic("english")
@@ -45,8 +45,8 @@ def generate_private_key(wordlist, target_hash):
     return None
 
 def validate_private_key(private_key, target_address):
-    key = BitcoinPrivateKey(private_key)
-    address = key.public_key().address()
+    key = HDKey.from_seed(private_key, network='main')
+    address = key.public_key.address()
     return address == target_address
 
 def recover_recovery_phrase(wordlist, target_address):
@@ -89,22 +89,19 @@ def main():
         if private_key:
             print(f"Private key generated: {private_key}")
             is_valid = validate_private_key(private_key, target)
-            if private_key:
-    print(f"Private key generated: {private_key}")
-    is_valid = validate_private_key(private_key, target)
-    if is_valid:
-        print("Private key is valid!")
+            if is_valid:
+                print("Private key is valid!")
+            else:
+                print("Generated private key is invalid.")
+        else:
+            print(f"No matching password found for target hash {target_hash}.")
+
+    recovery_word = recover_recovery_phrase(wordlist, target)
+
+    if recovery_word:
+        print(f"Recovered recovery phrase: {recovery_word}")
     else:
-        print("Generated private key is invalid.")
-else:
-    print(f"No matching password found for target hash {target_hash}.")
-
-recovery_word = recover_recovery_phrase(wordlist, target)
-
-if recovery_word:
-    print(f"Recovered recovery phrase: {recovery_word}")
-else:
-    print("Recovery phrase not found.")
+        print("Recovery phrase not found.")
 
 if __name__ == '__main__':
     main()
