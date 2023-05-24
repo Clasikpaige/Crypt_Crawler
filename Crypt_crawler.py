@@ -8,7 +8,7 @@ from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
 from cryptography.hazmat.primitives import hashes
 from mnemonic import Mnemonic
-from bitcoinlib.keys import HDKey
+from bitcoinlib.keys import BitcoinPrivateKey
 
 def generate_wordlist(count, output_file):
     mnemonic = Mnemonic("english")
@@ -45,8 +45,8 @@ def generate_private_key(wordlist, target_hash):
     return None
 
 def validate_private_key(private_key, target_address):
-    key = HDKey.from_seed(private_key, network='main')
-    address = key.public_key.address()
+    key = BitcoinPrivateKey(private_key)
+    address = key.public_key().address()
     return address == target_address
 
 def recover_recovery_phrase(wordlist, target_address):
