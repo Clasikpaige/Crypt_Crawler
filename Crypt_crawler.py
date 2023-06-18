@@ -13,9 +13,10 @@ from bitcoinlib.keys import BitcoinPrivateKey
 def generate_wordlist(count, output_file):
     mnemonic = Mnemonic("english")
     words = mnemonic.generate(strength=128)
-    df = pd.DataFrame([words.split()], columns=['word'])
+    wordlist = words.split()
+    df = pd.DataFrame({'word': wordlist})
     df.to_csv(output_file, index=False)
-    return words
+    return wordlist
 
 def hash_wordlist(hash_type, wordlist_file):
     hash_command = f'john --wordlist={wordlist_file} --format={hash_type}'
