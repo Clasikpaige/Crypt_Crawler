@@ -1,7 +1,31 @@
+"""
+Hey there! Welcome to the Crypt_crawler! 🚀
+
+This tool lets you perform various operations related to cryptocurrency, from generating wordlists to bruteforcing private keys. Below are the command-line options you can use:
+
+--count [COUNT]
+   The number of words to generate in the wordlist. Default is 1. You can use 0 if you want to read the wordlist from a file without generating new words.
+
+--output [FILE_PATH]
+   The name of the wordlist file. Default is 'wordlist.txt'. If you set --count to 0, this should point to your existing wordlist file.
+
+--hash-type [HASH_ALGORITHM]
+   The type of hash to use for wordlist hashing. Default is 'sha256'. Choose a hash algorithm supported by Python's hashlib library.
+
+--target [TARGET_ADDRESS]
+   The hostname or wallet address you want to target for private key generation and validation. If not provided, the tool will prompt you to enter it interactively.
+
+Here's a quick example:
+python crypt_crawler.py --count 5 --output path/to/your/wordlist.txt --hash-type sha256 --target your_wallet_address
+
+Remember, handle cryptocurrency-related tasks with care, and have fun exploring the Crypto Toolkit! 🌐🔑
+"""
+
 import subprocess
 import argparse
 import pandas as pd
 import binascii
+import os
 from pywallet import wallet
 from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
@@ -10,16 +34,25 @@ from mnemonic import Mnemonic
 from bitcoinlib.keys import BitcoinPrivateKey
 
 def generate_wordlist(count, output_file):
-    mnemonic = Mnemonic("english")
-    words = mnemonic.generate(strength=128)
-    wordlist = words.split()
-    df = pd.DataFrame({'word': wordlist})
-    df.to_csv(output_file, index=False)
-    return wordlist
+    if count == 0:
+        return []
 
-def hash_wordlist(hash_type, wordlist_file):
-    hash_command = f'john --wordlist={wordlist_file} --format={hash_type}'
-    subprocess.run(hash_command, shell=True)
+    if not os.path.exists(output_file):
+        print(f"Error: File '{output_file}' not found.")
+        return []
+
+    with open(output_file, 'r') as file:
+        wordlist = file.read().splitlines()
+
+    if len(wordlist) < count:
+        print(f"Error: Not enough words in the provided file. Expected {count}, got {len(wordlist)}.")
+        return []
+
+    return wordlist[:count]
+
+def hash_wordlist(wordlist, hash_type):
+    hashed_wordlist = [hashlib.new(hash_type, word.encode()).hexdigest() for word in wordlist]
+    return hashed_wordlist
 
 def generate_private_key(word, target_address):
     backend = default_backend()
@@ -37,32 +70,41 @@ def generate_private_key(word, target_address):
     key = kdf.derive(seed)
     private_key = binascii.hexlify(key).decode()
     
-    if validate_private_key(private_key, target_address):
-        return private_key
-    else:
-        return None
+    try:
+        if validate_private_key(private_key, target_address):
+            return private_key
+    except Exception as e:
+        print(f"Error during private key validation: {e}")
+    return None
 
 def validate_private_key(private_key, target_address):
-    key = BitcoinPrivateKey(private_key)
-    address = key.public_key().address()
-    return address == target_address
+    try:
+        key = BitcoinPrivateKey(private_key)
+        address = key.public_key().address()
+        return address == target_address
+    except Exception as e:
+        print(f"Error during private key validation: {e}")
+        return False
 
 def recover_recovery_phrase(wordlist, target_address):
     for word in wordlist:
-        seed = wallet.mnemonic_to_seed(word)
-        recovered_wallet = wallet.create_wallet(network="BTC", seed=seed, children=1)
-        recovered_address = recovered_wallet['address']
+        try:
+            seed = wallet.mnemonic_to_seed(word)
+            recovered_wallet = wallet.create_wallet(network="BTC", seed=seed, children=1)
+            recovered_address = recovered_wallet['address']
         
-        if target_address == recovered_address:
-            return word
-    
+            if target_address == recovered_address:
+                return word
+        except Exception as e:
+            print(f"Error during recovery phrase recovery: {e}")
+
     return None
 
 def main():
     parser = argparse.ArgumentParser(description='Generate a wordlist and hash it with John the Ripper.')
     parser.add_argument('--count', type=int, default=1, help='the number of words to generate in the wordlist')
-    parser.add_argument('--output', type=str, default='wordlist.csv', help='the name of the output file')
-    parser.add_argument('--hash-type', type=str, default='md5crypt', help='the type of hash to use with John the Ripper')
+    parser.add_argument('--output', type=str, default='wordlist.txt', help='the name of the wordlist file')
+    parser.add_argument('--hash-type', type=str, default='sha256', help='the type of hash to use')
     parser.add_argument('--target', type=str, default=None, help='the hostname or wallet to target')
     args = parser.parse_args()
 
@@ -74,14 +116,16 @@ def main():
     if not target:
         target = input("Enter the target hostname or wallet address: ")
 
-    wordlist_file = os.path.join('wordlist', output_file)
-    wordlist = generate_wordlist(count, wordlist_file)
-    hash_wordlist(hash_type, wordlist_file)
+    wordlist = generate_wordlist(count, output_file)
+    if not wordlist:
+        return
+
+    hashed_wordlist = hash_wordlist(wordlist, hash_type)
 
     private_key = None
     if wordlist and target:
-        for word in wordlist:
-            private_key = generate_private_key(word, target)
+        for hashed_word in hashed_wordlist:
+            private_key = generate_private_key(hashed_word, target)
             if private_key:
                 break
 
