@@ -23,8 +23,9 @@ Remember, handle cryptocurrency-related tasks with care, and have fun exploring 
 
 import subprocess
 import argparse
-import pandas as pd
+import argparse
 import binascii
+import hashlib
 import os
 from pywallet import wallet
 from cryptography.hazmat.backends import default_backend
