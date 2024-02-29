@@ -1,26 +1,3 @@
-"""
-Hey there! Welcome to the Crypt_crawler! 🚀
-
-This tool lets you perform various operations related to cryptocurrency, from generating wordlists to bruteforcing private keys. Below are the command-line options you can use:
-
---count [COUNT]
-   The number of words to generate in the wordlist. Default is 1. You can use 0 if you want to read the wordlist from a file without generating new words.
-
---output [FILE_PATH]
-   The name of the wordlist file. Default is 'wordlist.txt'. If you set --count to 0, this should point to your existing wordlist file.
-
---hash-type [HASH_ALGORITHM]
-   The type of hash to use for wordlist hashing. Default is 'sha256'. Choose a hash algorithm supported by Python's hashlib library.
-
---target [TARGET_ADDRESS]
-   The hostname or wallet address you want to target for private key generation and validation. If not provided, the tool will prompt you to enter it interactively.
-
-Here's a quick example:
-python crypt_crawler.py --count 5 --output path/to/your/wordlist.txt --hash-type sha256 --target your_wallet_address
-
-Remember, handle cryptocurrency-related tasks with care, and have fun exploring the Crypto Toolkit! 🌐🔑
-"""
-
 import subprocess
 import argparse
 import argparse
