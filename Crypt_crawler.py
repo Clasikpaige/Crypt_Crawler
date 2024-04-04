@@ -1,32 +1,23 @@
-import subprocess
-import argparse
-import argparse
-import binascii
 import hashlib
-import os
+import binascii
 from pywallet import wallet
 from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
-from cryptography.hazmat.primitives import hashes
 from mnemonic import Mnemonic
 from bitcoinlib.keys import BitcoinPrivateKey
+import argparse
 
-def generate_wordlist(count, output_file):
-    if count == 0:
+def generate_wordlist(count):
+    if count <= 0:
         return []
 
-    if not os.path.exists(output_file):
-        print(f"Error: File '{output_file}' not found.")
-        return []
+    mnemo = Mnemonic("english")
+    wordlist = []
+    for _ in range(count):
+        word = mnemo.generate()
+        wordlist.append(word)
 
-    with open(output_file, 'r') as file:
-        wordlist = file.read().splitlines()
-
-    if len(wordlist) < count:
-        print(f"Error: Not enough words in the provided file. Expected {count}, got {len(wordlist)}.")
-        return []
-
-    return wordlist[:count]
+    return wordlist
 
 def hash_wordlist(wordlist, hash_type):
     hashed_wordlist = [hashlib.new(hash_type, word.encode()).hexdigest() for word in wordlist]
@@ -38,7 +29,7 @@ def generate_private_key(word, target_address):
     password = word.encode()
     
     kdf = PBKDF2HMAC(
-        algorithm=hashes.SHA256(),
+        algorithm=hashlib.sha256(),
         length=32,
         salt=salt,
         iterations=100000,
@@ -81,20 +72,18 @@ def recover_recovery_phrase(wordlist, target_address):
 def main():
     parser = argparse.ArgumentParser(description='Generate a wordlist and hash it with John the Ripper.')
     parser.add_argument('--count', type=int, default=1, help='the number of words to generate in the wordlist')
-    parser.add_argument('--output', type=str, default='wordlist.txt', help='the name of the wordlist file')
     parser.add_argument('--hash-type', type=str, default='sha256', help='the type of hash to use')
     parser.add_argument('--target', type=str, default=None, help='the hostname or wallet to target')
     args = parser.parse_args()
 
     count = args.count
-    output_file = args.output
     hash_type = args.hash_type
     target = args.target
 
     if not target:
         target = input("Enter the target hostname or wallet address: ")
 
-    wordlist = generate_wordlist(count, output_file)
+    wordlist = generate_wordlist(count)
     if not wordlist:
         return
 
