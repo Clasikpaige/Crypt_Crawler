@@ -1,5 +1,3 @@
-pywallet
-cryptography
 mnemonic
 bitcoinlib
-pandas
+argparse
