@@ -25,13 +25,11 @@ def validate_private_key(private_key, target_address):
 def main():
     parser = argparse.ArgumentParser(description='Generate mnemonic phrases and validate them against a target address.')
     parser.add_argument('--target', type=str, required=True, help='The target wallet address to validate against')
-    parser.add_argument('--iterations', type=int, default=10, help='The number of mnemonic phrases to generate and check')
     args = parser.parse_args()
 
     target_address = args.target
-    iterations = args.iterations
 
-    for _ in range(iterations):
+    while True:
         # Generate a mnemonic phrase
         mnemonic_phrase = generate_mnemonic()
         print(f"Generated mnemonic phrase: {mnemonic_phrase}")
@@ -44,8 +42,6 @@ def main():
         if validate_private_key(private_key, target_address):
             print(f"The derived private key is valid for the target address!\nMnemonic Phrase: {mnemonic_phrase}")
             break
-    else:
-        print("No valid mnemonic phrase found in the given iterations.")
 
 if __name__ == '__main__':
     main()
