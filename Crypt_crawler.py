@@ -1,124 +1,97 @@
 import hashlib
+import random
+import concurrent.futures
 from mnemonic import Mnemonic
 from bitcoinlib.keys import HDKey
-import argparse
-import random
 
-# Define the elliptic curve parameters and the base point
-a = -0x3
-b = 0x5ac635d8aa3a93e7b3ebbd55769886bc651d06b0cc53b0f63bce3c3e27d2604b
-p = 0xffffffff00000001000000000000000000000000ffffffffffffffffffffffff
-
-P = (0x6b17d1f2e12c4247f8bce6e563a440f277037d812deb33a0f4a13945d898c296, 
-     0x4fe342e2fe1a7f9b8ee7eb4a7c0f9e162bce33576b315ececbb6406837bf51f5)
-
-Q = (0x52910a011565810be90d03a299cb55851bab33236b7459b21db82b9f5c1874fe, 
-     0xe3d03339f660528d511c2b1865bcdfd105490ffc4c597233dd2b2504ca42a562)
-
-# Elliptic Curve class for mathematical operations
+# Elliptic Curve Class
 class ECurve:
     def __init__(self, a, b, p):
         self.a = a
         self.b = b
         self.p = p
-    
-    def mod(self, x):
-        return x % self.p
 
-    def invmod(self, x):
-        s0, s1 = 0, 1
-        r0, r1 = self.p, x
-        while r0 != 0:
-            q = r1 // r0
-            r1, r0 = r0, r1 - q * r0
-            s1, s0 = s0, s1 - q * s0
-        return s1 % self.p
+    def modinv(self, a, p):
+        if a == 0:
+            raise ValueError('Inverse does not exist')
+        lm, hm = 1, 0
+        low, high = a % p, p
+        while low > 1:
+            ratio = high // low
+            nm, new = hm - lm * ratio, high - low * ratio
+            lm, low, hm, high = nm, new, lm, low
+        return lm % p
 
-    def add(self, p, q):
-        if p == (0, 0): return q
-        if q == (0, 0): return p
-        
-        if p == q:
-            if p[1] != 0:
-                l = self.mod(self.mod(3 * p[0] * p[0] + self.a) * self.invmod(2 * p[1]))
-                x = self.mod(l * l - 2 * p[0])
-                y = self.mod(l * (p[0] - x) - p[1])
-                return (x, y)
+    def add(self, P, Q):
+        if P == (None, None):
+            return Q
+        if Q == (None, None):
+            return P
+        if P == Q:
+            l = (3 * P[0] * P[0] + self.a) * self.modinv(2 * P[1], self.p) % self.p
         else:
-            if q[0] != p[0]:
-                l = self.mod(self.mod(q[1] - p[1]) * self.invmod(q[0] - p[0]))
-                x = self.mod(l * l - p[0] - q[0])
-                y = self.mod(l * (p[0] - x) - p[1])
-                return (x, y)
-        return (0, 0)
+            l = (Q[1] - P[1]) * self.modinv(Q[0] - P[0], self.p) % self.p
+        x = (l * l - P[0] - Q[0]) % self.p
+        y = (l * (P[0] - x) - P[1]) % self.p
+        return (x, y)
 
-    def double(self, p):
-        return self.add(p, p)
-
-    def multiply(self, p, n):
-        if n == 0:
-            return (0, 0)
-        elif n == 1:
-            return p
-        elif n % 2 == 1:
-            return self.add(p, self.multiply(p, n - 1))
-        else:
-            return self.multiply(self.double(p), n // 2)
+    def multiply(self, k, P):
+        R = (None, None)
+        while k:
+            if k & 1:
+                R = self.add(R, P)
+            P = self.add(P, P)
+            k >>= 1
+        return R
 
 # Pollard's Rho Algorithm for ECDLP
-def pollards_rho(curve, base_point, target_point, max_iter=100000):
-    x1, x2, x3 = random.randint(1, p - 1), random.randint(1, p - 1), random.randint(1, p - 1)
-    A1, A2, A3 = base_point, base_point, base_point
+def pollards_rho(curve, base_point, target_point, max_iter=500000):
+    def f(X, a, b):
+        if X[0] % 3 == 0:
+            return curve.add(X, base_point), (a + 1) % curve.p, b
+        elif X[0] % 3 == 1:
+            return curve.add(X, X), (a * 2) % curve.p, (b * 2) % curve.p
+        else:
+            return curve.add(X, target_point), a, (b + 1) % curve.p
+
+    x, alpha, beta = base_point, 1, 0
+    X, A, B = x, alpha, beta
     for _ in range(max_iter):
-        if A1 == target_point:
-            return x1
-        if A2 == target_point:
-            return x2
-        if A3 == target_point:
-            return x3
-        
-        # Update A1, A2, A3 and their corresponding x values
-        x1 = (x1 + 1) % p
-        A1 = curve.add(A1, base_point)
-        if x1 % 3 == 0:
-            x1 = (x1 + 1) % p
-            A1 = curve.add(A1, base_point)
-        
-        x2 = (x2 + 2) % p
-        A2 = curve.double(A2)
-        if x2 % 3 == 0:
-            x2 = (x2 + 1) % p
-            A2 = curve.add(A2, base_point)
-
-        x3 = (x3 + 1) % p
-        A3 = curve.add(A3, base_point)
-        if x3 % 3 == 0:
-            x3 = (x3 + 1) % p
-            A3 = curve.add(A3, base_point)
-        
-        if A1 == A2:
-            k = (x1 - x2) % p
-            if k == 0:
-                continue
-            k = curve.invmod(k)
-            d = (x2 - x1) % p
-            if d == 0:
-                continue
-            return (d * k) % p
-
+        x, alpha, beta = f(x, alpha, beta)
+        X, A, B = f(*f(X, A, B))
+        if x == X:
+            r = (beta - B) % curve.p
+            if r == 0:
+                return None
+            return (A - alpha) * curve.modinv(r, curve.p) % curve.p
     return None
 
-def main():
-    # Define elliptic curve
-    curve = ECurve(a, b, p)
+def parallel_pollards_rho(curve, base_point, target_point, max_iter, num_workers):
+    with concurrent.futures.ProcessPoolExecutor(max_workers=num_workers) as executor:
+        futures = []
+        for _ in range(num_workers):
+            futures.append(executor.submit(pollards_rho, curve, base_point, target_point, max_iter))
+        results = [future.result() for future in futures]
+    return results
 
-    # Compute ECDLP
-    result = pollards_rho(curve, P, Q)
-    if result is not None:
-        print(f"Found private key: {result}")
-    else:
-        print("Private key not found")
+def main():
+    # Define curve parameters (example with secp256k1)
+    a = 0
+    b = 7
+    p = 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEFFFFFC2F
+    base_point = (0x79BE667EF9DCBBAC55A06295CE870B07029BFCDB2DCE28D959F2815B16F81798,
+                  0x483ADA7726A3C4655DA4FBFC0E1108A8FD17B448A68554199C47D08FFB10D4B8)
+    target_point = (0xC6047F9441ED7D6D3045406E95C07CD85A7867CD20995B5C167B72B1269A1EA6,
+                    0x1AE168FEA63DC339A3C58419466CEAEEF7F632653266D0E9279C79F1A7E0EBE7)
+
+    curve = ECurve(a, b, p)
+    max_iter = 500000
+    num_workers = 4  # Adjust the number of workers based on your hardware
+
+    results = parallel_pollards_rho(curve, base_point, target_point, max_iter, num_workers)
+    for result in results:
+        if result is not None:
+            print(f"Found private key: {result}")
 
 if __name__ == "__main__":
     main()
-    
