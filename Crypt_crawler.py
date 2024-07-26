@@ -3,8 +3,8 @@ import random
 import concurrent.futures
 from mnemonic import Mnemonic
 from bitcoinlib.keys import HDKey
+import argparse
 
-# Elliptic Curve Class
 class ECurve:
     def __init__(self, a, b, p):
         self.a = a
@@ -44,7 +44,6 @@ class ECurve:
             k >>= 1
         return R
 
-# Pollard's Rho Algorithm for ECDLP
 def pollards_rho(curve, base_point, target_point, max_iter=500000):
     def f(X, a, b):
         if X[0] % 3 == 0:
@@ -75,23 +74,33 @@ def parallel_pollards_rho(curve, base_point, target_point, max_iter, num_workers
     return results
 
 def main():
+    parser = argparse.ArgumentParser(description="Pollard's Rho algorithm for ECDLP on secp256k1 curve.")
+    parser.add_argument('--wallet_address', type=str, required=True, help='Target Bitcoin wallet address')
+    parser.add_argument('--max_iter', type=int, default=500000, help='Maximum iterations for Pollard\'s Rho algorithm')
+    parser.add_argument('--num_workers', type=int, default=4, help='Number of parallel workers')
+    args = parser.parse_args()
+
     # secp256k1 curve parameters
     a = 0
     b = 7
     p = 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEFFFFFC2F
     base_point = (0x79BE667EF9DCBBAC55A06295CE870B07029BFCDB2DCE28D959F2815B16F81798,
                   0x483ADA7726A3C4655DA4FBFC0E1108A8FD17B448A68554199C47D08FFB10D4B8)
-    target_point = (0xC6047F9441ED7D6D3045406E95C07CD85A7867CD20995B5C167B72B1269A1EA6,
-                    0x1AE168FEA63DC339A3C58419466CEAEEF7F632653266D0E9279C79F1A7E0EBE7)
+
+    # Convert the wallet address to the target point (Q)
+    target_point = convert_wallet_to_point(args.wallet_address)
 
     curve = ECurve(a, b, p)
-    max_iter = 500000
-    num_workers = 4  # Adjust the number of workers based on your hardware capabilities
 
-    results = parallel_pollards_rho(curve, base_point, target_point, max_iter, num_workers)
+    results = parallel_pollards_rho(curve, base_point, target_point, args.max_iter, args.num_workers)
     for result in results:
         if result is not None:
             print(f"Found private key: {result}")
+
+def convert_wallet_to_point(wallet_address):
+    # Placeholder function to convert wallet address to elliptic curve point (Q)
+    # You need to implement the actual conversion logic here
+    raise NotImplementedError("Conversion from wallet address to elliptic curve point is not implemented.")
 
 if __name__ == "__main__":
     main()
