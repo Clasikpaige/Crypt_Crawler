@@ -75,7 +75,7 @@ def parallel_pollards_rho(curve, base_point, target_point, max_iter, num_workers
     return results
 
 def main():
-    # Define curve parameters (example with secp256k1)
+    # secp256k1 curve parameters
     a = 0
     b = 7
     p = 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEFFFFFC2F
@@ -86,7 +86,7 @@ def main():
 
     curve = ECurve(a, b, p)
     max_iter = 500000
-    num_workers = 4  # Adjust the number of workers based on your hardware
+    num_workers = 4  # Adjust the number of workers based on your hardware capabilities
 
     results = parallel_pollards_rho(curve, base_point, target_point, max_iter, num_workers)
     for result in results:
