@@ -41,3 +41,17 @@ To run the script, use the following command:
 
 ```bash
 python pollards_rho.py --wallet_address <your_bitcoin_wallet_address> --max_iter 500000 --num_workers 4
+
+Output
+
+The script will output the found private key if the algorithm successfully solves the ECDLP. The process may take significant time depending on the complexity and available computational resources.
+
+Files
+
+	•	pollards_rho.py: The main script file containing the Pollard’s Rho algorithm implementation.
+	•	requirements.txt: Lists the Python dependencies needed to run the script.
+	•	README.md: This file providing instructions on how to use the script.
+
+Contributing
+
+If you find any issues or have suggestions for improvements, feel free to open an issue or submit a pull request.
