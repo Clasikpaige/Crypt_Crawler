@@ -4,6 +4,8 @@ import concurrent.futures
 from mnemonic import Mnemonic
 from bitcoinlib.keys import HDKey
 import argparse
+import requests
+import json
 
 class ECurve:
     def __init__(self, a, b, p):
@@ -73,6 +75,31 @@ def parallel_pollards_rho(curve, base_point, target_point, max_iter, num_workers
         results = [future.result() for future in futures]
     return results
 
+def get_address_info(wallet_address):
+    url = f"https://api.blockcypher.com/v1/btc/main/addrs/{wallet_address}"
+    response = requests.get(url)
+    if response.status_code == 200:
+        return response.json()
+    else:
+        raise ValueError(f"Error fetching address info: {response.status_code}, {response.text}")
+
+def convert_wallet_to_point(wallet_address):
+    address_info = get_address_info(wallet_address)
+    pubkey = address_info.get('public')
+    if not pubkey:
+        raise ValueError("Public key not found for the given wallet address.")
+    x, y = pubkey_to_point_conversion(pubkey)
+    return (x, y)
+
+def pubkey_to_point_conversion(pubkey):
+    if len(pubkey) == 66:  # Uncompressed key
+        prefix = pubkey[:2]
+        if prefix == '04':
+            x = int(pubkey[2:66], 16)
+            y = int(pubkey[66:], 16)
+            return x, y
+    raise ValueError("Invalid public key format")
+
 def main():
     parser = argparse.ArgumentParser(description="Pollard's Rho algorithm for ECDLP on secp256k1 curve.")
     parser.add_argument('--wallet_address', type=str, required=True, help='Target Bitcoin wallet address')
@@ -87,20 +114,13 @@ def main():
     base_point = (0x79BE667EF9DCBBAC55A06295CE870B07029BFCDB2DCE28D959F2815B16F81798,
                   0x483ADA7726A3C4655DA4FBFC0E1108A8FD17B448A68554199C47D08FFB10D4B8)
 
-    # Convert the wallet address to the target point (Q)
     target_point = convert_wallet_to_point(args.wallet_address)
 
     curve = ECurve(a, b, p)
-
     results = parallel_pollards_rho(curve, base_point, target_point, args.max_iter, args.num_workers)
-    for result in results:
-        if result is not None:
-            print(f"Found private key: {result}")
 
-def convert_wallet_to_point(wallet_address):
-    # Placeholder function to convert wallet address to elliptic curve point (Q)
-    # You need to implement the actual conversion logic here
-    raise NotImplementedError("Conversion from wallet address to elliptic curve point is not implemented.")
+    for i, res in enumerate(results):
+        print(f"Worker {i+1} result: {res}")
 
 if __name__ == "__main__":
     main()
