@@ -17,7 +17,7 @@ Ensure you have the necessary dependencies installed. You can install them using
 
     ```bash
     git clone https://github.com/your-repo/pollards-rho-ecdlp.git
-    cd pollards-rho-ecdlp
+    cd Crypt_crawler.py 
     ```
 
 2. **Install dependencies**
@@ -40,7 +40,7 @@ The script requires the following arguments:
 To run the script, use the following command:
 
 ```bash
-python pollards_rho.py --wallet_address <your_bitcoin_wallet_address> --max_iter 500000 --num_workers 4
+python Crypt_crawler.py --wallet_address <your_bitcoin_wallet_address> --max_iter 500000 --num_workers 4
 
 Output
 
@@ -48,7 +48,7 @@ The script will output the found private key if the algorithm successfully solve
 
 Files
 
-	•	pollards_rho.py: The main script file containing the Pollard’s Rho algorithm implementation.
+	•	Crypt_crawler.py: The main script file containing the Pollard’s Rho algorithm implementation.
 	•	requirements.txt: Lists the Python dependencies needed to run the script.
 	•	README.md: This file providing instructions on how to use the script.
 
